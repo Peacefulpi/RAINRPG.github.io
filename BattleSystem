@@ -1,0 +1,343 @@
+import time
+import random
+
+Accuracy00 = ['Miss','Miss','Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit']
+Accuracy0 = ['Miss','Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','CriticalHit']
+Accuracy1 = ['Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Hit','CriticalHit']
+Accuracy2 = ['Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Hit','CriticalHit']
+CultistActions = ['Shoot','Shoot','Melee','Melee','Heal']
+PistolDamage = [10,11,12,13,14,15]
+RifleDamage = [15,16,17,18,19,20]
+ShotgunDamage = [12,15,17,18,21,22]
+PenKnifeDamage = [5,6,7,8,9,10]
+FireAxeDamage = [7,8,9,10,11,12]
+
+AIMPISTOL = 'AimPistol'
+PISTOLCRITICALHIT = 'PistolCriticalHit'
+PISTOLHIT = 'PistolHit'
+PISTOLMISS = 'PistolMiss'
+AIMSHOTGUN = 'AimShotgun'
+SHOTGUNCRITICALHIT = 'ShotgunCriticalHit'
+SHOTGUNHIT = 'ShotgunHit'
+SHOTGUNMISS = 'ShotgunMiss'
+AIMRIFLE = 'AimRifle'
+RIFLECRITICALHIT = 'RifleCriticalHit'
+RIFLEHIT = 'RifleHit'
+RIFLEMISS = 'RifleMiss'
+USEPENKNIFE = ''
+PENKNIFECRITICALHIT = 'PenKnifeCriticalHit'
+PENKNIFEHIT = 'PenKnifeHit'
+PENKNIFEMISS = 'PenKnifeHit'
+USEFIREAXE = 'UseFireAxe'
+FIREAXECRITICALHIT = 'FireAxeCriticalHit'
+FIREAXEHIT = 'FireAxeHit'
+FIREAXEMISS = 'FireAxeMiss'
+ENEMYHEAL = 'EnemyHeal'
+ENEMYMELEE = 'EnemyMelee'
+ENEMYSHOOT = 'EnemyShoot'
+
+Enemy = {
+'Cultist': {
+'AimPistol': 'You aim the pistol at the Cultist and fire...',
+'PistolCriticalHit': '...The Cultist moves out of the way and the bullet flies off into the distance.',
+'PistolHit': '...The bullet hits the Cultist!',
+'PistolMiss': '...The bullet hits the Cultist in the chest; they jolt back in pain clutching the bloody wound.',
+'AimShotgun': '',
+'ShotgunCriticalHit': '',
+'ShotgunHit': '',
+'ShotgunMiss': '',
+'AimRifle': '',
+'RifleCriticalHit': '',
+'RifleHit': '',
+'RifleMiss': '',
+'UsePenKnife': '',
+'PenKnifeCriticalHit': '',
+'PenKnifeHit': '',
+'PenKnifeMiss': '',
+'UseFireAxe': '',
+'FireAxeCriticalHit': '',
+'FireAxeHit': '',
+'FireAxeMiss': '',
+'Confusion': '',
+'Fire': '',
+'EnemyHeal': '',
+'EnemyMelee': '',
+'EnemyShoot': ''
+},
+'Screecher': {
+'PistolCriticalHit': 'AAAAAGGGGGGGGGGGGGHHHHHHL',
+'PistolHit': 'BIG OOf',
+'PistolMiss': 'DODGEDD'
+}
+}
+
+EnemyType = 'Cultist'
+Gun = 'Pistol'
+Ammo = 1
+DidItHit = 'No'
+Accuracy = 2
+EnemyHP = 20
+
+def Battle():
+  global Gun, Melee, Power, Heal, Accuracy, Ammo, EnemyHP, Bandages, DidItHit
+  print('''                                           ''')
+  print('''       ==========YOUR TURN==========       ''')
+  print('''               Make your move!             ''')
+  print('''                   Gun                     ''')
+  print('''                   Melee                   ''')
+  print('''                   Heal                    ''')
+  print('''                   Power                   ''')
+  print('''       =============================       ''')
+  print('''                                           ''')
+  Select = input()
+  if Select.lower() == "gun":
+    if Gun == "Pistol":
+      if Ammo > 0:
+        PrintDescription = Enemy[EnemyType]['AimPistol']
+        print(PrintDescription)
+        print("")
+        time.sleep(1)
+        if Accuracy == 00:
+          DidItHit = random.choice(Accuracy00)
+          PistolAccuracy()
+        if Accuracy == 0:
+          DidItHit = random.choice(Accuracy0)
+          PistolAccuracy()
+        if Accuracy == 1:
+          DidItHit = random.choice(Accuracy1)
+          PistolAccuracy()
+        if Accuracy == 2:
+          DidItHit = random.choice(Accuracy2)
+          PistolAccuracy()
+      if Gun == "Shotgun":
+        if Ammo > 0:
+          PrintDescription = Enemy[EnemyType]['AimShotgun']
+          print(PrintDescription)
+          print("")
+          time.sleep(1)
+          if Accuracy == 00:
+            DidItHit = random.choice(Accuracy00)
+            ShotgunAccuracy()
+          if Accuracy == 0:
+            DidItHit = random.choice(Accuracy0)
+            ShotgunAccuracy()
+          if Accuracy == 1:
+            DidItHit = random.choice(Accuracy1)
+            ShotgunAccuracy()
+          if Accuracy == 2:
+            DidItHit = random.choice(Accuracy1)
+            ShotgunAccuracy()
+      if Gun == "Rifle":
+        if Ammo > 0:
+          PrintDescription = Enemy[EnemyType]['AimRifle']
+          print(PrintDescription)
+          print("")
+          time.sleep(1)
+          if Accuracy == 00:
+            DidItHit = random.choice(Accuracy00)
+            RifleAccuracy()
+          if Accuracy == 0:
+            DidItHit = random.choice(Accuracy0)
+            RifleAccuracy()
+          if Accuracy == 1:
+            DidItHit = random.choice(Accuracy1)
+            RifleAccuracy()
+          if Accuracy == 2:
+            DidItHit = random.choice(Accuracy2)
+            RifleAccuracy()
+
+def PistolAccuracy():
+  global Ammo, EnemyHP, DidItHit
+  if DidItHit == "Miss":
+    PrintDescription = Enemy[EnemyType]['PistolMiss']
+    print(PrintDescription)
+    Ammo = Ammo - 1
+    time.sleep(2)
+    EnemyTurn()
+  if DidItHit == "Hit":
+    PrintDescription = Enemy[EnemyType]['PistolHit']
+    print(PrintDescription)
+    Ammo = Ammo - 1
+    DMG = random.choice(PistolDamage)
+    EnemyHP = EnemyHP - DMG
+    time.sleep(0.5)
+    print('''       -''',DMG,'''HP       ''')
+    time.sleep(2)
+    if EnemyHP < 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP == 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP > 0:
+      select = "No"
+      EnemyTurn()
+  if DidItHit == "CriticalHit":
+    print('''                                        ''')
+    print('''    =============================       ''')
+    print('''            CRITICAL HIT!               ''')
+    print('''    =============================       ''')
+    print('''                                        ''')
+    time.sleep(1)
+    PrintDescription = Enemy[EnemyType]['PistolCriticalHit']
+    print(PrintDescription)
+    print("")
+    Ammo = Ammo - 1
+    EnemyHP = EnemyHP - 18
+    time.sleep(0.5)
+    print('''                   ''')
+    print('''       -18HP       ''')
+    print('''                   ''')
+    time.sleep(2)
+    if EnemyHP < 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP == 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP > 0:
+      select = "No"
+      PrintDescription = Enemy[EnemyType]['CriticalHitSurvive']
+      print(PrintDescription)
+      print('''                                                    ''')
+      time.sleep(1)
+      EnemyTurn()
+
+def ShotgunAccuracy():
+  global Ammo, EnemyHP, DidItHit
+  if DidItHit == "Miss":
+    PrintDescription = Enemy[EnemyType]['ShotgunMiss']
+    print(PrintDescription)
+    Ammo = Ammo - 1
+    time.sleep(2)
+    EnemyTurn()
+  if DidItHit == "Hit":
+    PrintDescription = Enemy[EnemyType]['ShotgunHit']
+    print(PrintDescription)
+    Ammo = Ammo - 1
+    DMG = random.choice(ShotgunDamage)
+    EnemyHP = EnemyHP - DMG
+    time.sleep(0.5)
+    print('''       -''',DMG,'''HP       ''')
+    time.sleep(2)
+    if EnemyHP < 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP == 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP > 0:
+      select = "No"
+      EnemyTurn()
+  if DidItHit == "CriticalHit":
+    print('''                                        ''')
+    print('''    =============================       ''')
+    print('''            CRITICAL HIT!               ''')
+    print('''    =============================       ''')
+    print('''                                        ''')
+    time.sleep(1)
+    PrintDescription = Enemy[EnemyType]['ShotgunCriticalHit']
+    print(PrintDescription)
+    print("")
+    Ammo = Ammo - 1
+    EnemyHP = EnemyHP - 25
+    time.sleep(0.5)
+    print('''                   ''')
+    print('''       -25HP       ''')
+    print('''                   ''')
+    time.sleep(2)
+    if EnemyHP < 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP == 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP > 0:
+      select = "No"
+      PrintDescription = Enemy[EnemyType]['CriticalHitSurvive']
+      print(PrintDescription)
+      print("")
+      time.sleep(1)
+      EnemyTurn()
+
+def RifleAccuracy():
+  global Ammo, EnemyHP, DidItHit
+  if DidItHit == "Miss":
+    PrintDescription = Enemy[EnemyType]['RifleMiss']
+    print(PrintDescription)
+    Ammo = Ammo - 1
+    time.sleep(2)
+    EnemyTurn()
+  if DidItHit == "Hit":
+    PrintDescription = Enemy[EnemyType]['RifleHit']
+    print(PrintDescription)
+    Ammo = Ammo - 1
+    DMG = random.choice(RifleDamage)
+    EnemyHP = EnemyHP - DMG
+    time.sleep(0.5)
+    print('''       -''',DMG,'''HP       ''')
+    time.sleep(2)
+    if EnemyHP < 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP == 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP > 0:
+      select = "No"
+      EnemyTurn()
+  if DidItHit == "CriticalHit":
+    print('''                                        ''')
+    print('''    =============================       ''')
+    print('''            CRITICAL HIT!               ''')
+    print('''    =============================       ''')
+    print('''                                        ''')
+    time.sleep(1)
+    PrintDescription = Enemy[EnemyType]['RifleCriticalHit']
+    print(PrintDescription)
+    print("")
+    Ammo = Ammo - 1
+    EnemyHP = EnemyHP - 24
+    time.sleep(0.5)
+    print('''                   ''')
+    print('''       -24HP       ''')
+    print('''                   ''')
+    time.sleep(2)
+    if EnemyHP < 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP == 0:
+        select = "No"
+        BattleWon()
+    elif EnemyHP > 0:
+      select = "No"
+      PrintDescription = Enemy[EnemyType]['CriticalHitSurvive']
+      print(PrintDescription)
+      print("")
+      time.sleep(1)
+      EnemyTurn()
+
+def EnemyTurn():
+  global EnemyType, EnemyAction
+  if EnemyType == 'Cultist':
+    EnemyAction = random.choice(CultistActions)
+    CarryOutEnemyAction()
+
+def CarryOutEnemyAction():
+  global EnemyAction, EnemyType
+  if EnemyAction == 'Shoot':
+    PrintDescription = Enemy[EnemyType]['EnemyShoot']
+    print(PrintDescription)
+    print("")
+    Battle()
+  if EnemyAction == 'Melee':
+    PrintDescription = Enemy[EnemyType]['EnemyMelee']
+    print(PrintDescription)
+    print("")
+    Battle()
+  if EnemyAction == 'Heal':
+    PrintDescription = Enemy[EnemyType]['EnemyHeal']
+    print(PrintDescription)
+    print("")
+    Battle()
+Battle()
