@@ -650,7 +650,7 @@ def GameOver():
   if Select.lower() == 'yes':
     Restart()
   if Select.lower() == 'no':
-    sys.exit()
+    sys.exit
 
 def BattleWon():
   print("       ==========YOU WIN==========")
