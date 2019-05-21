@@ -1,4 +1,5 @@
 import time
+import sys
 import random
 
 Accuracy00 = ['Miss','Miss','Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit']
@@ -650,7 +651,7 @@ def GameOver():
   if Select.lower() == 'yes':
     Restart()
   if Select.lower() == 'no':
-    sys.exit
+    sys.exit()
 
 def BattleWon():
   print("       ==========YOU WIN==========")
