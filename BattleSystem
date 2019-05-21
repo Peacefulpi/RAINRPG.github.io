@@ -41,9 +41,9 @@ ENEMYSHOOT = 'EnemyShoot'
 Enemy = {
 'Cultist': {
 'AimPistol': 'You aim the pistol at the Cultist and fire...',
-'PistolCriticalHit': '...The Cultist moves out of the way and the bullet flies off into the distance.',
+'PistolCriticalHit': '...The bullet hits the Cultist in the chest; they jolt back in pain clutching the bloody wound.',
 'PistolHit': '...The bullet hits the Cultist!',
-'PistolMiss': '...The bullet hits the Cultist in the chest; they jolt back in pain clutching the bloody wound.',
+'PistolMiss': ' ...The Cultist moves out of the way and the bullet flies off into the distance.',
 'AimShotgun': 'You loosesly aim the shotgun at the Cultist and fire...',
 'ShotgunCriticalHit': '...The shells hit the cultist. The Cultist shrieks as he falls to the ground.',
 'ShotgunHit': '...The Cultist moves out of the way and the shells fly off into the distance.',
@@ -62,6 +62,8 @@ Enemy = {
 'FireAxeMiss': '...The Cultist moves backwards as you miss clumsily.',
 'Confusion': '',
 'Fire': '',
+'WinText': '',
+'CriticalHitSurvive': '',
 'EnemyHeal': '',
 'EnemyMelee': '',
 'EnemyShoot': '',
@@ -104,10 +106,10 @@ Enemy = {
 HP = 1
 EnemyType = 'Cultist'
 Gun = 'Pistol'
-Ammo = 1
+Ammo = 25
 DidItHit = 'No'
 Accuracy = 2
-EnemyHP = 20
+EnemyHP = 1
 
 def Battle():
   global Gun, Melee, Power, Heal, Accuracy, Ammo, EnemyHP, Bandages, DidItHit
@@ -232,7 +234,7 @@ def PistolAccuracy():
       select = "No"
       PrintDescription = Enemy[EnemyType]['CriticalHitSurvive']
       print(PrintDescription)
-      print('''                                                    ''')
+      print("")
       time.sleep(1)
       EnemyTurn()
 
@@ -494,9 +496,16 @@ def GameOver():
   print("Do you want to restart? (Yes/No)")
   print("")
   Select = input()
-  if Select == 'yes':
+  if Select.lower() == 'yes':
     Restart()
-  if Select == 'No':
+  if Select.lower() == 'no':
     sys.exit()
+
+def BattleWon():
+  print("       ==========YOU WIN==========")
+  PrintDescription = Enemy[EnemyType]['WinText']
+  print(PrintDescription)
+  print("       ===========================")
+  #InsertGoToLocationCode
 
 Battle()
