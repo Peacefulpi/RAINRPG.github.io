@@ -52,10 +52,10 @@ Enemy = {
 'RifleCriticalHit': '...The bullet went straight through the Cultist; the Cultist dropped dead to the ground.',
 'RifleHit': '...The bullet hits the Cultist!',
 'RifleMiss': '...The Cultist moves out of the way and the bullet flies off into the distance.',
-'UsePenKnife': "You charge at the Cultist and swing you pen knife at the Cultist's face...",
-'PenKnifeCriticalHit': "...The pen knife cuts violently through the Cultist's arm: the Cultist jumps back sheilding their Wound",
-'PenKnifeHit': '...The pen knife cuts the the Cultist!',
-'PenKnifeMiss': '...The Cultist jolts out of the way; the pen knife slices the air.',
+'UseKnife': "You charge at the Cultist and swing you knife at the Cultist's face...",
+'KnifeCriticalHit': "...The knife cuts violently through the Cultist's arm: the Cultist jumps back sheilding their Wound",
+'KnifeHit': '...The knife cuts the the Cultist!',
+'KnifeMiss': '...The Cultist jolts out of the way; the knife slices the air.',
 'UseFireAxe': 'You steadily lift up the axe and swing at the Cultist.',
 'FireAxeCriticalHit': "...The fire axe cuts into the Cultist's shoulder deeply: the Cultist removes the axe painfully and steps back with his hand on his bloody shoulder.",
 'FireAxeHit': '...The fire axe hits the Cultist: the Cultist is moderately injured.',
@@ -179,6 +179,157 @@ def Battle():
           if Accuracy == 2:
             DidItHit = random.choice(Accuracy2)
             RifleAccuracy()
+  if Select.lower() == "Melee":
+    if Melee == "Knife":
+      if Ammo > 0:
+        PrintDescription = Enemy[EnemyType]['UseKnife']
+        print("")
+        print(PrintDescription)
+        print("")
+        time.sleep(1)
+        if Accuracy == 00:
+          DidItHit = random.choice(Accuracy00)
+          KnifeAccuracy()
+        if Accuracy == 0:
+          DidItHit = random.choice(Accuracy0)
+          KnifeAccuracy()
+        if Accuracy == 1:
+          DidItHit = random.choice(Accuracy1)
+          KnifeAccuracy()
+        if Accuracy == 2:
+          DidItHit = random.choice(Accuracy2)
+          KnifeAccuracy()
+    if Melee == "FireAxe":
+      if Ammo > 0:
+        PrintDescription = Enemy[EnemyType]['UseFireAxe']
+        print("")
+        print(PrintDescription)
+        print("")
+        time.sleep(1)
+        if Accuracy == 00:
+          DidItHit = random.choice(Accuracy00)
+          FireAxeAccuracy()
+        if Accuracy == 0:
+          DidItHit = random.choice(Accuracy0)
+          FireAxeAccuracy()
+        if Accuracy == 1:
+          DidItHit = random.choice(Accuracy1)
+          FireAxeAccuracy()
+        if Accuracy == 2:
+          DidItHit = random.choice(Accuracy2)
+          FireAxeAccuracy()
+
+def KnifeAccuracy():
+  global EnemyHP, DidItHit
+  if DidItHit == "Miss":
+    PrintDescription = Enemy[EnemyType]['KnifeMiss']
+    print(PrintDescription)
+    time.sleep(2)
+    EnemyTurn()
+  if DidItHit == "Hit":
+    PrintDescription = Enemy[EnemyType]['KnifeHit']
+    print(PrintDescription)
+    print("")
+    DMG = random.choice(KnifeDamage)
+    EnemyHP = EnemyHP - DMG
+    time.sleep(0.5)
+    print('''       -''',DMG,'''HP       ''')
+    time.sleep(2)
+    if EnemyHP < 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP == 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP > 0:
+      select = "No"
+      EnemyTurn()
+  if DidItHit == "CriticalHit":
+    print('''                                        ''')
+    print('''    =============================       ''')
+    print('''            CRITICAL HIT!               ''')
+    print('''    =============================       ''')
+    print('''                                        ''')
+    time.sleep(1)
+    PrintDescription = Enemy[EnemyType]['KnifeCriticalHit']
+    print(PrintDescription)
+    print("")
+    Ammo = Ammo - 1
+    EnemyHP = EnemyHP - 12
+    time.sleep(0.5)
+    print('''                   ''')
+    print('''       -12HP       ''')
+    print('''                   ''')
+    time.sleep(2)
+    if EnemyHP < 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP == 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP > 0:
+      select = "No"
+      PrintDescription = Enemy[EnemyType]['CriticalHitSurvive']
+      print(PrintDescription)
+      print("")
+      time.sleep(1)
+      EnemyTurn()
+
+def FireAxeAccuracy():
+  global EnemyHP, DidItHit
+  if DidItHit == "Miss":
+    PrintDescription = Enemy[EnemyType]['FireAxeMiss']
+    print(PrintDescription)
+    time.sleep(2)
+    EnemyTurn()
+  if DidItHit == "Hit":
+    PrintDescription = Enemy[EnemyType]['FireAxeHit']
+    print(PrintDescription)
+    print("")
+    DMG = random.choice(FireAxeDamage)
+    EnemyHP = EnemyHP - DMG
+    time.sleep(0.5)
+    print('''       -''',DMG,'''HP       ''')
+    time.sleep(2)
+    if EnemyHP < 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP == 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP > 0:
+      select = "No"
+      EnemyTurn()
+  if DidItHit == "CriticalHit":
+    print('''                                        ''')
+    print('''    =============================       ''')
+    print('''            CRITICAL HIT!               ''')
+    print('''    =============================       ''')
+    print('''                                        ''')
+    time.sleep(1)
+    PrintDescription = Enemy[EnemyType]['FireAxeCriticalHit']
+    print(PrintDescription)
+    print("")
+    Ammo = Ammo - 1
+    EnemyHP = EnemyHP - 16
+    time.sleep(0.5)
+    print('''                   ''')
+    print('''       -16HP       ''')
+    print('''                   ''')
+    time.sleep(2)
+    if EnemyHP < 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP == 0:
+      select = "No"
+      BattleWon()
+    elif EnemyHP > 0:
+      select = "No"
+      PrintDescription = Enemy[EnemyType]['CriticalHitSurvive']
+      print(PrintDescription)
+      print("")
+      time.sleep(1)
+      EnemyTurn()
 
 def PistolAccuracy():
   global Ammo, EnemyHP, DidItHit
