@@ -6,9 +6,11 @@ Accuracy0 = ['Miss','Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Cri
 Accuracy1 = ['Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Hit','CriticalHit']
 Accuracy2 = ['Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Hit','CriticalHit']
 CultistActions = ['Shoot','Shoot','Melee','Melee','Heal']
+PistolDamage = [11,12,13,14,15,16]
 PistolDamage = [10,11,12,13,14,15]
 RifleDamage = [15,16,17,18,19,20]
 ShotgunDamage = [12,15,17,18,21,22]
+SwordDamage = [8,9,10,10,11,12]
 PenKnifeDamage = [5,6,7,8,9,10]
 FireAxeDamage = [7,8,9,10,11,12]
 
@@ -62,7 +64,13 @@ Enemy = {
 'Fire': '',
 'EnemyHeal': '',
 'EnemyMelee': '',
-'EnemyShoot': ''
+'EnemyShoot': '',
+'EnemyGunHit': '',
+'EnemyGunMiss': '',
+'EnemyGunCriticalHit': '',
+'EnemyMeleeHit': '',
+'EnemyMeleeMiss': '',
+'EnemyMeleeCriticalHit': ''
 },
 'Screecher': {
 'AimPistol': '',
@@ -89,10 +97,11 @@ Enemy = {
 'Fire': '',
 'EnemyHeal': '',
 'EnemyMelee': '',
-'EnemyShoot': ''
+'EnemyShoot': '',
 }
 }
 
+HP = 25
 EnemyType = 'Cultist'
 Gun = 'Pistol'
 Ammo = 1
@@ -346,20 +355,133 @@ def EnemyTurn():
     CarryOutEnemyAction()
 
 def CarryOutEnemyAction():
-  global EnemyAction, EnemyType
+  global EnemyAction, EnemyHP, EnemyType
   if EnemyAction == 'Shoot':
     PrintDescription = Enemy[EnemyType]['EnemyShoot']
     print(PrintDescription)
     print("")
-    Battle()
+    CalculateEnemyGunDamage()
   if EnemyAction == 'Melee':
     PrintDescription = Enemy[EnemyType]['EnemyMelee']
     print(PrintDescription)
     print("")
-    Battle()
+    DidItHit = random.choice(Accuracy1)
+    CalculateEnemyMeleeDamage()
   if EnemyAction == 'Heal':
     PrintDescription = Enemy[EnemyType]['EnemyHeal']
     print(PrintDescription)
     print("")
+    EnemyHP = EnemyHP + 4
     Battle()
+
+def CalculateEnemyMeleeDamage():
+  global EnemyType, HP
+  if EnemyType == 'Cultist':
+    if DidItHit == "Miss":
+      PrintDescription = Enemy[EnemyType]['EnemyMeleeMiss']
+      print(PrintDescription)
+      time.sleep(2)
+      Battle()
+    if DidItHit == "Hit":
+      PrintDescription = Enemy[EnemyType]['EnemyMeleeHit']
+      print(PrintDescription)
+      DMG = random.choice(SwordDamage)
+      HP = HP - DMG
+      time.sleep(0.5)
+      print('''       -''',DMG,'''HP       ''')
+      time.sleep(2)
+      if EnemyHP < 0:
+        select = "No"
+        GameOver()
+      elif EnemyHP == 0:
+        select = "No"
+        GameOver()
+      elif EnemyHP > 0:
+        select = "No"
+        Battle()
+    if DidItHit == "CriticalHit":
+      print('''                                        ''')
+      print('''    =============================       ''')
+      print('''            CRITICAL HIT!               ''')
+      print('''    =============================       ''')
+      print('''                                        ''')
+      time.sleep(1)
+      PrintDescription = Enemy[EnemyType]['EnemyMeleeCriticalHit']
+      print(PrintDescription)
+      print("")
+      HP = HP - 25
+      time.sleep(0.5)
+      print('''                   ''')
+      print('''       -15HP       ''')
+      print('''                   ''')
+      time.sleep(2)
+      if EnemyHP < 0:
+        select = "No"
+        GameOver()
+      elif EnemyHP == 0:
+        select = "No"
+        GameOver()
+      elif EnemyHP > 0:
+        select = "No"
+        PrintDescription = Player['SwordSurvive']
+        print(PrintDescription)
+        print("")
+        time.sleep(1)
+        Battle()
+
+def CalculateEnemyGunDamage():
+  global EnemyType, HP
+  if EnemyType == 'Cultist':
+    if DidItHit == "Miss":
+      PrintDescription = Enemy[EnemyType]['EnemyGunMiss']
+      print(PrintDescription)
+      time.sleep(2)
+      Battle()
+    if DidItHit == "Hit":
+      PrintDescription = Enemy[EnemyType]['EnemyGunHit']
+      print(PrintDescription)
+      DMG = random.choice(SubmachineGunDamage)
+      HP = HP - DMG
+      time.sleep(0.5)
+      print('''       -''',DMG,'''HP       ''')
+      time.sleep(2)
+      if EnemyHP < 0:
+        select = "No"
+        GameOver()
+      elif EnemyHP == 0:
+        select = "No"
+        GameOver()
+      elif EnemyHP > 0:
+        select = "No"
+        Battle()
+    if DidItHit == "CriticalHit":
+      print('''                                        ''')
+      print('''    =============================       ''')
+      print('''            CRITICAL HIT!               ''')
+      print('''    =============================       ''')
+      print('''                                        ''')
+      time.sleep(1)
+      PrintDescription = Enemy[EnemyType]['EnemyGunCriticalHit']
+      print(PrintDescription)
+      print("")
+      HP = HP - 25
+      time.sleep(0.5)
+      print('''                   ''')
+      print('''       -20HP       ''')
+      print('''                   ''')
+      time.sleep(2)
+      if EnemyHP < 0:
+        select = "No"
+        GameOver()
+      elif EnemyHP == 0:
+        select = "No"
+        GameOver()
+      elif EnemyHP > 0:
+        select = "No"
+        PrintDescription = Player['SubmachineGunSurvive']
+        print(PrintDescription)
+        print("")
+        time.sleep(1)
+        Battle()
+
 Battle()
