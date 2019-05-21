@@ -6,7 +6,7 @@ Accuracy0 = ['Miss','Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Cri
 Accuracy1 = ['Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Hit','CriticalHit']
 Accuracy2 = ['Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Hit','CriticalHit']
 CultistActions = ['Shoot','Shoot','Melee','Melee','Heal']
-PistolDamage = [11,12,13,14,15,16]
+SubmachineGunDamage = [11,12,13,14,15,16]
 PistolDamage = [10,11,12,13,14,15]
 RifleDamage = [15,16,17,18,19,20]
 ShotgunDamage = [12,15,17,18,21,22]
@@ -101,7 +101,7 @@ Enemy = {
 }
 }
 
-HP = 25
+HP = 1
 EnemyType = 'Cultist'
 Gun = 'Pistol'
 Ammo = 1
@@ -125,6 +125,7 @@ def Battle():
     if Gun == "Pistol":
       if Ammo > 0:
         PrintDescription = Enemy[EnemyType]['AimPistol']
+        print("")
         print(PrintDescription)
         print("")
         time.sleep(1)
@@ -188,6 +189,7 @@ def PistolAccuracy():
   if DidItHit == "Hit":
     PrintDescription = Enemy[EnemyType]['PistolHit']
     print(PrintDescription)
+    print("")
     Ammo = Ammo - 1
     DMG = random.choice(PistolDamage)
     EnemyHP = EnemyHP - DMG
@@ -390,13 +392,13 @@ def CalculateEnemyMeleeDamage():
       time.sleep(0.5)
       print('''       -''',DMG,'''HP       ''')
       time.sleep(2)
-      if EnemyHP < 0:
+      if HP < 0:
         select = "No"
         GameOver()
-      elif EnemyHP == 0:
+      elif HP == 0:
         select = "No"
         GameOver()
-      elif EnemyHP > 0:
+      elif HP > 0:
         select = "No"
         Battle()
     if DidItHit == "CriticalHit":
@@ -415,13 +417,13 @@ def CalculateEnemyMeleeDamage():
       print('''       -15HP       ''')
       print('''                   ''')
       time.sleep(2)
-      if EnemyHP < 0:
+      if HP < 0:
         select = "No"
         GameOver()
-      elif EnemyHP == 0:
+      elif HP == 0:
         select = "No"
         GameOver()
-      elif EnemyHP > 0:
+      elif HP > 0:
         select = "No"
         PrintDescription = Player['SwordSurvive']
         print(PrintDescription)
@@ -445,13 +447,13 @@ def CalculateEnemyGunDamage():
       time.sleep(0.5)
       print('''       -''',DMG,'''HP       ''')
       time.sleep(2)
-      if EnemyHP < 0:
+      if HP < 0:
         select = "No"
         GameOver()
-      elif EnemyHP == 0:
+      elif HP == 0:
         select = "No"
         GameOver()
-      elif EnemyHP > 0:
+      elif HP > 0:
         select = "No"
         Battle()
     if DidItHit == "CriticalHit":
@@ -470,18 +472,31 @@ def CalculateEnemyGunDamage():
       print('''       -20HP       ''')
       print('''                   ''')
       time.sleep(2)
-      if EnemyHP < 0:
+      if HP < 0:
         select = "No"
         GameOver()
-      elif EnemyHP == 0:
+      elif HP == 0:
         select = "No"
         GameOver()
-      elif EnemyHP > 0:
+      elif HP > 0:
         select = "No"
         PrintDescription = Player['SubmachineGunSurvive']
         print(PrintDescription)
         print("")
         time.sleep(1)
         Battle()
+
+def GameOver():
+  time.sleep(1)
+  print("")
+  print("==========YOU HAVE DIED==========")
+  print("")
+  print("Do you want to restart? (Yes/No)")
+  print("")
+  Select = input()
+  if Select == 'yes':
+    Restart()
+  if Select == 'No':
+    sys.exit()
 
 Battle()
