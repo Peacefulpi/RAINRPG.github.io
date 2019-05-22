@@ -1,7 +1,7 @@
 import time
-import sys
 import random
 
+AccuracyConfusion = ['Miss','Miss','Miss','Miss','Miss','Miss','Miss','Miss','Hit']
 Accuracy00 = ['Miss','Miss','Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit']
 Accuracy0 = ['Miss','Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','CriticalHit']
 Accuracy1 = ['Miss','Miss','Hit','Hit','Hit','Hit','Hit','Hit','Hit','Hit','CriticalHit']
@@ -12,7 +12,7 @@ PistolDamage = [10,11,12,13,14,15]
 RifleDamage = [15,16,17,18,19,20]
 ShotgunDamage = [12,15,17,18,21,22]
 SwordDamage = [8,9,10,10,11,12]
-PenKnifeDamage = [5,6,7,8,9,10]
+KnifeDamage = [5,6,7,8,9,10]
 FireAxeDamage = [7,8,9,10,11,12]
 
 AIMPISTOL = 'AimPistol'
@@ -27,10 +27,10 @@ AIMRIFLE = 'AimRifle'
 RIFLECRITICALHIT = 'RifleCriticalHit'
 RIFLEHIT = 'RifleHit'
 RIFLEMISS = 'RifleMiss'
-USEPENKNIFE = ''
-PENKNIFECRITICALHIT = 'PenKnifeCriticalHit'
-PENKNIFEHIT = 'PenKnifeHit'
-PENKNIFEMISS = 'PenKnifeHit'
+USEKNIFE = 'UseKnife'
+KNIFECRITICALHIT = 'KnifeCriticalHit'
+KNIFEHIT = 'KnifeHit'
+KNIFEMISS = 'KnifeHit'
 USEFIREAXE = 'UseFireAxe'
 FIREAXECRITICALHIT = 'FireAxeCriticalHit'
 FIREAXEHIT = 'FireAxeHit'
@@ -73,7 +73,9 @@ Enemy = {
 'EnemyGunCriticalHit': '',
 'EnemyMeleeHit': '',
 'EnemyMeleeMiss': '',
-'EnemyMeleeCriticalHit': ''
+'EnemyMeleeCriticalHit': '',
+'EnemyConfusedHeal': '',
+'EnemyConfused': ''
 },
 'Screecher': {
 'AimPistol': '',
@@ -108,117 +110,199 @@ HP = 1
 EnemyType = 'Cultist'
 Gun = 'Pistol'
 Ammo = 25
+Melee = 'Knife'
+Power = 'None'
 DidItHit = 'No'
 Accuracy = 2
 EnemyHP = 1
 
 def Battle():
-  global Gun, Melee, Power, Heal, Accuracy, Ammo, EnemyHP, Bandages, DidItHit
-  print('''                                           ''')
-  print('''       ==========YOUR TURN==========       ''')
-  print('''               Make your move!             ''')
-  print('''                   Gun                     ''')
-  print('''                   Melee                   ''')
-  print('''                   Heal                    ''')
-  print('''                   Power                   ''')
-  print('''       =============================       ''')
-  print('''                                           ''')
-  Select = input()
-  if Select.lower() == "gun":
-    if Gun == "Pistol":
-      if Ammo > 0:
-        PrintDescription = Enemy[EnemyType]['AimPistol']
-        print("")
-        print(PrintDescription)
-        print("")
-        time.sleep(1)
-        if Accuracy == 00:
-          DidItHit = random.choice(Accuracy00)
-          PistolAccuracy()
-        if Accuracy == 0:
-          DidItHit = random.choice(Accuracy0)
-          PistolAccuracy()
-        if Accuracy == 1:
-          DidItHit = random.choice(Accuracy1)
-          PistolAccuracy()
-        if Accuracy == 2:
-          DidItHit = random.choice(Accuracy2)
-          PistolAccuracy()
-      if Gun == "Shotgun":
+  Loop = True
+  while Loop == True:
+    global Gun, Melee, Power, Heal, Accuracy, Ammo, EnemyHP, Bandages, DidItHit, EnemyConfused
+    print('''                                           ''')
+    print('''       ==========YOUR TURN==========       ''')
+    print('''               Make your move!             ''')
+    print('''                   Gun                     ''')
+    print('''                   Melee                   ''')
+    print('''                   Heal                    ''')
+    print('''                   Power                   ''')
+    print('''       =============================       ''')
+    print('''                                           ''')
+    Select = input()
+    if Select.lower() == "gun":
+      if Gun == "Pistol":
         if Ammo > 0:
-          PrintDescription = Enemy[EnemyType]['AimShotgun']
+          PrintDescription = Enemy[EnemyType]['AimPistol']
+          print("")
           print(PrintDescription)
           print("")
           time.sleep(1)
+          if Accuracy == 000:
+            DidItHit = random.choice(AccuracyConfusion)
+            Loop = False
+            PistolAccuracy()
           if Accuracy == 00:
             DidItHit = random.choice(Accuracy00)
-            ShotgunAccuracy()
+            Loop = False
+            PistolAccuracy()
           if Accuracy == 0:
             DidItHit = random.choice(Accuracy0)
-            ShotgunAccuracy()
+            Loop = False
+            PistolAccuracy()
           if Accuracy == 1:
             DidItHit = random.choice(Accuracy1)
-            ShotgunAccuracy()
-          if Accuracy == 2:
-            DidItHit = random.choice(Accuracy1)
-            ShotgunAccuracy()
-      if Gun == "Rifle":
-        if Ammo > 0:
-          PrintDescription = Enemy[EnemyType]['AimRifle']
-          print(PrintDescription)
-          print("")
-          time.sleep(1)
-          if Accuracy == 00:
-            DidItHit = random.choice(Accuracy00)
-            RifleAccuracy()
-          if Accuracy == 0:
-            DidItHit = random.choice(Accuracy0)
-            RifleAccuracy()
-          if Accuracy == 1:
-            DidItHit = random.choice(Accuracy1)
-            RifleAccuracy()
+            Loop = False
+            PistolAccuracy()
           if Accuracy == 2:
             DidItHit = random.choice(Accuracy2)
-            RifleAccuracy()
-  if Select.lower() == "Melee":
-    if Melee == "Knife":
-      if Ammo > 0:
-        PrintDescription = Enemy[EnemyType]['UseKnife']
+            Loop = False
+            PistolAccuracy()
+        if Gun == "Shotgun":
+          if Ammo > 0:
+            PrintDescription = Enemy[EnemyType]['AimShotgun']
+            print(PrintDescription)
+            print("")
+            time.sleep(1)
+            if Accuracy == 000:
+              DidItHit = random.choice(AccuracyConfusion)
+              Loop = False
+              PistolAccuracy()
+            if Accuracy == 00:
+              DidItHit = random.choice(Accuracy00)
+              Loop = False
+              ShotgunAccuracy()
+            if Accuracy == 0:
+              DidItHit = random.choice(Accuracy0)
+              Loop = False
+              ShotgunAccuracy()
+            if Accuracy == 1:
+              DidItHit = random.choice(Accuracy1)
+              Loop = False
+              ShotgunAccuracy()
+            if Accuracy == 2:
+              DidItHit = random.choice(Accuracy1)
+              Loop = False
+              ShotgunAccuracy()
+        if Gun == "Rifle":
+          if Ammo > 0:
+            PrintDescription = Enemy[EnemyType]['AimRifle']
+            print(PrintDescription)
+            print("")
+            time.sleep(1)
+            if Accuracy == 000:
+              DidItHit = random.choice(AccuracyConfusion)
+              Loop = False
+              PistolAccuracy()
+            if Accuracy == 00:
+              DidItHit = random.choice(Accuracy00)
+              Loop = False
+              RifleAccuracy()
+            if Accuracy == 0:
+              DidItHit = random.choice(Accuracy0)
+              Loop = False
+              RifleAccuracy()
+            if Accuracy == 1:
+              DidItHit = random.choice(Accuracy1)
+              Loop = False
+              RifleAccuracy()
+            if Accuracy == 2:
+              DidItHit = random.choice(Accuracy2)
+              Loop = False
+              RifleAccuracy()
+    if Select.lower() == "melee":
+      if Melee == "Knife":
+        if Ammo > 0:
+          PrintDescription = Enemy[EnemyType]['UseKnife']
+          print("")
+          print(PrintDescription)
+          print("")
+          time.sleep(1)
+          if Accuracy == 000:
+            DidItHit = random.choice(AccuracyConfusion)
+            Loop = False
+            PistolAccuracy()
+          if Accuracy == 00:
+            DidItHit = random.choice(Accuracy00)
+            Loop = False
+            KnifeAccuracy()
+          if Accuracy == 0:
+            DidItHit = random.choice(Accuracy0)
+            Loop = False
+            KnifeAccuracy()
+          if Accuracy == 1:
+            DidItHit = random.choice(Accuracy1)
+            Loop = False
+            KnifeAccuracy()
+          if Accuracy == 2:
+            DidItHit = random.choice(Accuracy2)
+            Loop = False
+            KnifeAccuracy()
+      if Melee == "FireAxe":
+        if Ammo > 0:
+          PrintDescription = Enemy[EnemyType]['UseFireAxe']
+          print("")
+          print(PrintDescription)
+          print("")
+          time.sleep(1)
+          if Accuracy == 000:
+            DidItHit = random.choice(AccuracyConfusion)
+            Loop = False
+            PistolAccuracy()
+          if Accuracy == 00:
+            DidItHit = random.choice(Accuracy00)
+            Loop = False
+            FireAxeAccuracy()
+          if Accuracy == 0:
+            DidItHit = random.choice(Accuracy0)
+            Loop = False
+            FireAxeAccuracy()
+          if Accuracy == 1:
+            DidItHit = random.choice(Accuracy1)
+            Loop = False
+            FireAxeAccuracy()
+          if Accuracy == 2:
+            DidItHit = random.choice(Accuracy2)
+            Loop = False
+            FireAxeAccuracy()
+    elif Select.lower() == "heal":
+      if Bandages > 0:
         print("")
-        print(PrintDescription)
+        print("       You take out a bandage and start wrapping it around your wound.")
         print("")
-        time.sleep(1)
-        if Accuracy == 00:
-          DidItHit = random.choice(Accuracy00)
-          KnifeAccuracy()
-        if Accuracy == 0:
-          DidItHit = random.choice(Accuracy0)
-          KnifeAccuracy()
-        if Accuracy == 1:
-          DidItHit = random.choice(Accuracy1)
-          KnifeAccuracy()
-        if Accuracy == 2:
-          DidItHit = random.choice(Accuracy2)
-          KnifeAccuracy()
-    if Melee == "FireAxe":
-      if Ammo > 0:
-        PrintDescription = Enemy[EnemyType]['UseFireAxe']
+        HP = HP + 4
+        Bandages = Bandages - 1
+        print("       +4HP       ")
         print("")
-        print(PrintDescription)
+        Loop = False
+        EnemyTurn()
+      elif Bandages == 0:
         print("")
-        time.sleep(1)
-        if Accuracy == 00:
-          DidItHit = random.choice(Accuracy00)
-          FireAxeAccuracy()
-        if Accuracy == 0:
-          DidItHit = random.choice(Accuracy0)
-          FireAxeAccuracy()
-        if Accuracy == 1:
-          DidItHit = random.choice(Accuracy1)
-          FireAxeAccuracy()
-        if Accuracy == 2:
-          DidItHit = random.choice(Accuracy2)
-          FireAxeAccuracy()
+        print("       You do not have any bandages.")
+    elif Select.lower() == "power":
+      if Power == 'None':
+        print("")
+        print("       You don't have any Powers.")
+      elif Power == 'Confusion':
+        print("")
+        print("       You point your hands at the Cultist and open your palms; a purple aura surrounds you as a translucent dark pink mist...")
+        print("       ...forms around your hands and travel to surround The Cultist. The Cultist seems dazed and confused.")
+        EnemyConfused = 3
+        Loop = False
+        EnemyTurn()
+      elif Power == 'FireBall':
+        print("")
+        print("              A fire ball forms in you hand; the fireball feels weird you feel like you hand should be burning but all you feel is a gentle warmth.")
+        print("              You throw the fire ball at the Cultist. As soon as the fire ball hits the cultist it explodes into a great blaze setting the Cultist on fire.")
+        EnemyHP = EnemyHP - 27
+        print("")
+        print("       -27HP")
+        print("")
+        Loop = False
+        EnemyTurn()
+    else:
+      print("")
+      print("       Sorry I don't recognise that command.       ")
 
 def KnifeAccuracy():
   global EnemyHP, DidItHit
@@ -235,6 +319,7 @@ def KnifeAccuracy():
     EnemyHP = EnemyHP - DMG
     time.sleep(0.5)
     print('''       -''',DMG,'''HP       ''')
+    print("")
     time.sleep(2)
     if EnemyHP < 0:
       select = "No"
@@ -512,26 +597,49 @@ def EnemyTurn():
 
 def CarryOutEnemyAction():
   global EnemyAction, EnemyHP, EnemyType
-  if EnemyAction == 'Shoot':
-    PrintDescription = Enemy[EnemyType]['EnemyShoot']
+  if EnemyConfused > 0:
+    EnemyConfused = EnemyConfused - 1
+  if EnemyConfused == 0:
+    if EnemyAction == 'Shoot':
+      PrintDescription = Enemy[EnemyType]['EnemyShoot']
+      print(PrintDescription)
+      print("")
+      CalculateEnemyGunDamage()
+    if EnemyAction == 'Melee':
+      PrintDescription = Enemy[EnemyType]['EnemyMelee']
+      print(PrintDescription)
+      print("")
+      DidItHit = random.choice(Accuracy1)
+      CalculateEnemyMeleeDamage()
+    if EnemyAction == 'Heal':
+      PrintDescription = Enemy[EnemyType]['EnemyHeal']
+      print(PrintDescription)
+      print("")
+      EnemyHP = EnemyHP + 4
+      Battle()
+  if EnemyConfused > 0:
+    PrintDescription = Enemy[EnemyType]['EnemyConfused']
     print(PrintDescription)
-    print("")
-    CalculateEnemyGunDamage()
-  if EnemyAction == 'Melee':
-    PrintDescription = Enemy[EnemyType]['EnemyMelee']
-    print(PrintDescription)
-    print("")
-    DidItHit = random.choice(Accuracy1)
-    CalculateEnemyMeleeDamage()
-  if EnemyAction == 'Heal':
-    PrintDescription = Enemy[EnemyType]['EnemyHeal']
-    print(PrintDescription)
-    print("")
-    EnemyHP = EnemyHP + 4
-    Battle()
+    if EnemyAction == 'Shoot':
+      PrintDescription = Enemy[EnemyType]['EnemyShoot']
+      print(PrintDescription)
+      print("")
+      DidItHit = random.choice(AccuracyConfusion)
+      CalculateEnemyGunDamage()
+    if EnemyAction == 'Melee':
+      PrintDescription = Enemy[EnemyType]['EnemyMelee']
+      print(PrintDescription)
+      print("")
+      DidItHit = random.choice(AccuracyConfusion)
+      CalculateEnemyMeleeDamage()
+    if EnemyAction == 'Heal':
+      PrintDescription = Enemy[EnemyType]['EnemyConfusedHeal']
+      print(PrintDescription)
+      print("")
+      Battle()
 
 def CalculateEnemyMeleeDamage():
-  global EnemyType, HP
+  global EnemyType, HP, DidItHit
   if EnemyType == 'Cultist':
     if DidItHit == "Miss":
       PrintDescription = Enemy[EnemyType]['EnemyMeleeMiss']
@@ -658,6 +766,7 @@ def BattleWon():
   PrintDescription = Enemy[EnemyType]['WinText']
   print(PrintDescription)
   print("       ===========================")
+  print("")
   #InsertGoToLocationCode
 
 Battle()
