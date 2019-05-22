@@ -75,7 +75,8 @@ Enemy = {
 'EnemyMeleeMiss': '',
 'EnemyMeleeCriticalHit': '',
 'EnemyConfusedHeal': '',
-'EnemyConfused': ''
+'EnemyConfused': '',
+'FireBallHit': 'You throw the fire ball at the Cultist. As soon as the fire ball hits the cultist it explodes into a great blaze setting the Cultist on fire.'
 },
 'Screecher': {
 'AimPistol': '',
@@ -113,13 +114,16 @@ Ammo = 25
 Melee = 'Knife'
 Power = 'None'
 DidItHit = 'No'
+Confused = 0
 Accuracy = 2
+AccuracyStore = 0
+Bandages = 2
 EnemyHP = 1
 
 def Battle():
   Loop = True
   while Loop == True:
-    global Gun, Melee, Power, Heal, Accuracy, Ammo, EnemyHP, Bandages, DidItHit, EnemyConfused
+    global Gun, Melee, Power, Heal, Accuracy, Ammo, EnemyHP, HP, Bandages, DidItHit, EnemyConfused, AccuracyStore, Confused
     print('''                                           ''')
     print('''       ==========YOUR TURN==========       ''')
     print('''               Make your move!             ''')
@@ -140,7 +144,14 @@ def Battle():
           time.sleep(1)
           if Accuracy == 000:
             DidItHit = random.choice(AccuracyConfusion)
-            Loop = False
+            Confused = Confused - 1
+            if Confused == 0:
+              Accuracy = AccuracyStore #Use this var to store the players current accuracy at the time of confusion
+            elif Confused > 0:
+              Loop = False
+              PistolAccuracy()
+            elif Confused:
+              Loop = False
             PistolAccuracy()
           if Accuracy == 00:
             DidItHit = random.choice(Accuracy00)
@@ -166,8 +177,14 @@ def Battle():
             time.sleep(1)
             if Accuracy == 000:
               DidItHit = random.choice(AccuracyConfusion)
-              Loop = False
-              PistolAccuracy()
+              Confused = Confused - 1
+              if Confused == 0:
+                Accuracy = AccuracyStore
+                Loop = False
+                ShotgunAccracy()
+              elif Confused > 0:
+                Loop = False
+                ShotgunAccuracy()
             if Accuracy == 00:
               DidItHit = random.choice(Accuracy00)
               Loop = False
@@ -192,8 +209,14 @@ def Battle():
             time.sleep(1)
             if Accuracy == 000:
               DidItHit = random.choice(AccuracyConfusion)
-              Loop = False
-              PistolAccuracy()
+              Confused = Confused - 1
+              if Confused == 0:
+                Accuracy = AccuracyStore
+                Loop = False
+                RifleAccracy()
+              elif Confused > 0:
+                Loop = False
+                RifleAccuracy()
             if Accuracy == 00:
               DidItHit = random.choice(Accuracy00)
               Loop = False
@@ -220,8 +243,14 @@ def Battle():
           time.sleep(1)
           if Accuracy == 000:
             DidItHit = random.choice(AccuracyConfusion)
-            Loop = False
-            PistolAccuracy()
+            Confused = Confused - 1
+            if Confused == 0:
+              Accuracy = AccuracyStore
+              Loop = False
+              KnifeAccracy()
+            elif Confused > 0:
+              Loop = False
+              KnifeAccuracy()
           if Accuracy == 00:
             DidItHit = random.choice(Accuracy00)
             Loop = False
@@ -247,8 +276,14 @@ def Battle():
           time.sleep(1)
           if Accuracy == 000:
             DidItHit = random.choice(AccuracyConfusion)
-            Loop = False
-            PistolAccuracy()
+            Confused = Confused - 1
+            if Confused == 0:
+              Accuracy = AccuracyStore
+              Loop = False
+              FireAxeAccracy()
+            elif Confused > 0:
+              Loop = False
+              FireAxeAccuracy()
           if Accuracy == 00:
             DidItHit = random.choice(Accuracy00)
             Loop = False
@@ -267,15 +302,20 @@ def Battle():
             FireAxeAccuracy()
     elif Select.lower() == "heal":
       if Bandages > 0:
-        print("")
-        print("       You take out a bandage and start wrapping it around your wound.")
-        print("")
-        HP = HP + 4
-        Bandages = Bandages - 1
-        print("       +4HP       ")
-        print("")
-        Loop = False
-        EnemyTurn()
+        if Confused == 0:
+          print("")
+          print("       You take out a bandage and start wrapping it around your wound.")
+          print("")
+          HP = HP + 4
+          Bandages = Bandages - 1
+          print("       +4HP       ")
+          print("")
+          Loop = False
+          EnemyTurn()
+        elif Confused > 0:
+          print("       You attempt to use the bandage but you drop it to the ground.")
+          print("")
+          EnemyTurn()
       elif Bandages == 0:
         print("")
         print("       You do not have any bandages.")
@@ -284,22 +324,33 @@ def Battle():
         print("")
         print("       You don't have any Powers.")
       elif Power == 'Confusion':
-        print("")
-        print("       You point your hands at the Cultist and open your palms; a purple aura surrounds you as a translucent dark pink mist...")
-        print("       ...forms around your hands and travel to surround The Cultist. The Cultist seems dazed and confused.")
-        EnemyConfused = 3
-        Loop = False
-        EnemyTurn()
+        if Confused == 0:
+          print("")
+          print("       You point your hands at the Cultist and open your palms; a purple aura surrounds you as a translucent dark pink mist...")
+          print("       ...forms around your hands and travel to surround The Cultist. The Cultist seems dazed and confused.")
+          EnemyConfused = 3
+          Loop = False
+          EnemyTurn()
+        elif Confused > 0:
+          print("       You attempt to use the power of confusion but you can't focus on what you are doing.")
+          print("")
+          EnemyTurn()
       elif Power == 'FireBall':
-        print("")
-        print("              A fire ball forms in you hand; the fireball feels weird you feel like you hand should be burning but all you feel is a gentle warmth.")
-        print("              You throw the fire ball at the Cultist. As soon as the fire ball hits the cultist it explodes into a great blaze setting the Cultist on fire.")
-        EnemyHP = EnemyHP - 27
-        print("")
-        print("       -27HP")
-        print("")
-        Loop = False
-        EnemyTurn()
+        if Confused == 0:
+          print("")
+          print("              A fire ball forms in you hand; the fireball feels weird you feel like you hand should be burning but all you feel is a gentle warmth.")
+          PrintDescription = Enemy[EnemyType]['FireBallHit']
+          print(PrintDescription)
+          EnemyHP = EnemyHP - 27
+          print("")
+          print("       -27HP")
+          print("")
+          Loop = False
+          EnemyTurn()
+        elif Confused > 0:
+          print("       You attempt to create a fire ball but you can't focus on what you are doing.")
+          print("")
+          EnemyTurn()
     else:
       print("")
       print("       Sorry I don't recognise that command.       ")
@@ -596,7 +647,7 @@ def EnemyTurn():
     CarryOutEnemyAction()
 
 def CarryOutEnemyAction():
-  global EnemyAction, EnemyHP, EnemyType
+  global EnemyAction, EnemyHP, EnemyType, EnemyConfused
   if EnemyConfused > 0:
     EnemyConfused = EnemyConfused - 1
   if EnemyConfused == 0:
