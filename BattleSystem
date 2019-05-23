@@ -76,7 +76,11 @@ Enemy = {
 'EnemyMeleeCriticalHit': '',
 'EnemyConfusedHeal': '',
 'EnemyConfused': '',
-'FireBallHit': 'You throw the fire ball at the Cultist. As soon as the fire ball hits the cultist it explodes into a great blaze setting the Cultist on fire.'
+'ConfusedWork1': 'You point your hands at the Cultist and open your palms; a purple aura surrounds you as a translucent dark pink mist...',
+'ConfusedWork2': '...forms around your hands and travel to surround The Cultist. The Cultist seems dazed and confused.',
+'FireBallHit': 'You throw the fire ball at the Cultist. As soon as the fire ball hits the cultist it explodes into a great blaze setting the Cultist on fire.',
+'FirstEncounter': 'dEsript',
+'GeneralEncounter': ''
 },
 'Screecher': {
 'AimPistol': '',
@@ -112,18 +116,35 @@ EnemyType = 'Cultist'
 Gun = 'Pistol'
 Ammo = 25
 Melee = 'Knife'
-Power = 'None'
+Power = 'Confusion'
 DidItHit = 'No'
+EnemyConfused = 0
 Confused = 0
 Accuracy = 2
 AccuracyStore = 0
+PowerAlreadyUsed = False
+FirstEncounterCultist = True
 Bandages = 2
-EnemyHP = 1
+
+def StartUpBattle():
+  global EnemyType, FirstEncounterCultist, EnemyHP
+  if EnemyType == 'Cultist':
+    if FirstEncounterCultist == True:
+      PrintDescription = Enemy[EnemyType]['FirstEncounter']
+      print(PrintDescription)
+      FirstEncounter = False
+      EnemyHP = 20
+      Battle()
+    elif DistEncounterCultist == False:
+      PrintDescription = Enemy[EnemyType]['GeneralEncounter']
+      print(PrintDescription)
+      EnemyHP = 20
+      Battle()
 
 def Battle():
   Loop = True
   while Loop == True:
-    global Gun, Melee, Power, Heal, Accuracy, Ammo, EnemyHP, HP, Bandages, DidItHit, EnemyConfused, AccuracyStore, Confused
+    global Gun, Melee, Power, Heal, Accuracy, Ammo, EnemyHP, HP, Bandages, DidItHit, EnemyConfused, AccuracyStore, Confused, PowerAlreadyUsed
     print('''                                           ''')
     print('''       ==========YOUR TURN==========       ''')
     print('''               Make your move!             ''')
@@ -325,28 +346,42 @@ def Battle():
         print("       You don't have any Powers.")
       elif Power == 'Confusion':
         if Confused == 0:
-          print("")
-          print("       You point your hands at the Cultist and open your palms; a purple aura surrounds you as a translucent dark pink mist...")
-          print("       ...forms around your hands and travel to surround The Cultist. The Cultist seems dazed and confused.")
-          EnemyConfused = 3
-          Loop = False
-          EnemyTurn()
+          if PowerAlreadyUsed == False:
+            time.sleep(1)
+            print("")
+            PrintDescription = Enemy[EnemyType]['ConfusedWork1']
+            print(PrintDescription)
+            time.sleep(1)
+            PrintDescription = Enemy[EnemyType]['ConfusedWork2']
+            print(PrintDescription)
+            EnemyConfused = 3
+            Loop = False
+            PowerAlreadyUsed = True
+            EnemyTurn()
+          elif PowerAlreadyUsed == True:
+            PrintDescription = User['PowerNotAvaliable']
+            print(PrintDesription)
         elif Confused > 0:
           print("       You attempt to use the power of confusion but you can't focus on what you are doing.")
           print("")
           EnemyTurn()
       elif Power == 'FireBall':
         if Confused == 0:
-          print("")
-          print("              A fire ball forms in you hand; the fireball feels weird you feel like you hand should be burning but all you feel is a gentle warmth.")
-          PrintDescription = Enemy[EnemyType]['FireBallHit']
-          print(PrintDescription)
-          EnemyHP = EnemyHP - 27
-          print("")
-          print("       -27HP")
-          print("")
-          Loop = False
-          EnemyTurn()
+          if PowerAlreadyUsed == False:
+            print("")
+            print("              A fire ball forms in you hand; the fireball feels weird you feel like you hand should be burning but all you feel is a gentle warmth.")
+            PrintDescription = Enemy[EnemyType]['FireBallHit']
+            print(PrintDescription)
+            EnemyHP = EnemyHP - 27
+            print("")
+            print("       -27HP")
+            print("")
+            Loop = False
+            PowerAlreadyUsed = True
+            EnemyTurn()
+          elif PowerAlreadyUsed == True:
+            PrintDescription = User['PowerNotAvaliable']
+            print(PrintDesription)
         elif Confused > 0:
           print("       You attempt to create a fire ball but you can't focus on what you are doing.")
           print("")
@@ -820,4 +855,4 @@ def BattleWon():
   print("")
   #InsertGoToLocationCode
 
-Battle()
+StartUpBattle()
